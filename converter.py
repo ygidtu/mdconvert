@@ -8,6 +8,7 @@ Convert markdown to html
 Convert html to pdf
 """
 import os
+import re
 import sys
 from argparse import ArgumentParser
 
@@ -84,14 +85,21 @@ def main(args):
 
     html = None
     if args.md:
-        html = Md2Html(args.md, args.html, args.css).convert()
+        if not args.html:
+            html = re.sub(r"(markdown|md)$", "html", args.md, re.I)
+
+        Md2Html(args.md, html, args.css).convert()
 
     if args.pdf:
-        if not html and args.html:
-            with open(args.html) as r:
-                html = r.read()
+        if not html:
+            html = args.html
 
-        pdfkit.from_string(html, output_path=args.pdf)
+        assert(os.path.exists(html)), "html file does not exists"
+
+        pdfkit.from_file(html, output_path=args.pdf)
+
+        if not args.html and os.path.exists(html):
+            os.remove(html)
 
 
 if __name__ == '__main__':
