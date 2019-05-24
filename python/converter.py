@@ -13,6 +13,7 @@ import sys
 from argparse import ArgumentParser
 
 import pdfkit
+
 from jinja2 import Environment, PackageLoader, select_autoescape
 from markdown2 import markdown
 
@@ -83,7 +84,7 @@ def main(args):
     """
     print(args)
 
-    html = None
+    html = args.html
     if args.md:
         if not args.html:
             html = re.sub(r"(markdown|md)$", "html", args.md, re.I)
