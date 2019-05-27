@@ -59,7 +59,7 @@ class Md2Html(object):
         with open(self.input_file) as r:
             body = r.read()
 
-        body = markdown(body)
+        body = markdown(body, extras=["tables"])
 
         template = self.env.get_template('typora.html')
 
